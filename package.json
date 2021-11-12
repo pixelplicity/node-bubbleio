@@ -1,6 +1,6 @@
 {
   "name": "node-bubbleio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Bubble.io Data and Workflow API client for node.js",
   "keywords": [
     "bubbleio",
