@@ -94,11 +94,12 @@ export declare type PaginatedResponse<T> = {
 export declare type WorkflowAPIOptions = {
     name: string;
 };
-export declare type WorkflowInitializeResponse = {
+export declare type WorkflowAPIResponse = {
     status: string;
-    id: string;
+    message?: string;
+    response?: Record<string, any>;
 };
-export declare type WorkflowResponse = {
-    status: string;
-    id: string;
+export declare type WorkflowAPIErrorResponse = {
+    statusCode: string;
+    body: WorkflowAPIResponse;
 };
