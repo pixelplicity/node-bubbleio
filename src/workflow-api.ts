@@ -49,7 +49,7 @@ export default class WorkflowAPI {
   async send(
     data: Record<string, unknown>,
     querystring?: Record<string, unknown>
-  ): Promise<WorkflowAPIResponse | WorkflowAPIErrorResponse> {
+  ): Promise<WorkflowAPIResponse> {
     const { baseUrl } = this;
     const response = await fetch(`${baseUrl}${buildRequestQuery(querystring)}`, {
       method: 'POST',
