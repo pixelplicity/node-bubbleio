@@ -1,5 +1,6 @@
 import config from './config';
 import DataAPI from './data-api';
+import WorkflowAPI from './workflow-api';
 import { BubbleConfig } from './types';
 
 const BubbleIO = {
@@ -7,7 +8,7 @@ const BubbleIO = {
     config.set(initialConfig);
   },
   DataAPI,
-  // Workflow: {},
+  WorkflowAPI,
 };
 
 export default BubbleIO;

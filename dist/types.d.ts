@@ -91,3 +91,14 @@ export declare type PaginatedResponse<T> = {
     remaining: number;
     results: T[];
 };
+export declare type WorkflowAPIOptions = {
+    name: string;
+};
+export declare type WorkflowInitializeResponse = {
+    status: string;
+    id: string;
+};
+export declare type WorkflowResponse = {
+    status: string;
+    id: string;
+};

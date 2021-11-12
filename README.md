@@ -4,8 +4,6 @@
 
 __Bubble.io Data and Workflow API client for node.js__
 
-_This package is in active development and only supports Data API endpoints right now_
-
 ## Installation & Setup
 
 ### Install
@@ -13,6 +11,36 @@ _This package is in active development and only supports Data API endpoints righ
 ```bash
 npm i node-bubbleio --save
 ```
+
+### Configuration
+
+Configure your application by passing these values into `BubbleIO.init`:
+
+- __apiToken__: Your API token
+- __domain__: Full domain to your API (_include `.bubbleapps.io` if not using a custom domain_)
+- __isLive__: Whether to use the live version of your API
+
+```js
+BubbleIO.init({
+  domain: 'my-amazing-app.bubbleapps.io',
+  apiToken: 'a6se92a9dd6cb69979128a6969c98c89'
+});
+```
+
+Or you can set these via environment variables and just run `BubbleIO.init`:
+
+```
+//.env
+BUBBLE_DOMAIN=my-amazing-app.bubbleapps.io
+BUBBLE_API_TOKEN=a6se92a9dd6cb69979128a6969c98c89
+BUBBLE_LIVE=false
+```
+
+```js
+BubbleIO.init()
+```
+
+## Data API
 
 ### Define your Things
 
@@ -35,36 +63,6 @@ class Thing extends BubbleIO.DataAPI {
   title_text: string;
 }
 ```
-
-### Configuration
-
-- __apiToken__: Your API token
-- __domain__: Full domain to your API (_include `.bubbleapps.io` if not using a custom domain_)
-- __isLive__: Whether to use the live version of your API
-
-You can set these by passing values into `BubbleIO.init`:
-
-```js
-BubbleIO.init({
-  domain: 'my-amazing-app.bubbleapps.io',
-  apiToken: 'a6se92a9dd6cb69979128a6969c98c89'
-});
-```
-
-Or you can set these via environment variables and just run `BubbleIO.init`:
-
-```
-//.env
-BUBBLE_DOMAIN=my-amazing-app.bubbleapps.io
-BUBBLE_API_TOKEN=a6se92a9dd6cb69979128a6969c98c89
-BUBBLE_LIVE=false
-```
-
-```js
-BubbleIO.init()
-```
-
-## Usage
 
 ### Retrieve a thing by ID
 
@@ -150,6 +148,38 @@ const found = await Thing.find({
 ```
 
 This method supports all [pagination](https://manual.bubble.io/core-resources/api/data-api#pagination), [search constraints](https://manual.bubble.io/core-resources/api/data-api#search-constraints), and [sorting options](https://manual.bubble.io/core-resources/api/data-api#sorting-options).
+
+## Workflow API
+
+### Define your Workflow
+
+Each Workflow API endpoint needs to be defined using the `BubbleIO.WorkflowAPI` class:
+
+```js
+const BubbleIO = require('node-bubbleio');
+
+class MyAPI = new BubbleIO.WorkflowAPI({
+  name: 'myworkflow'
+})
+```
+
+### Triggering a Workflow
+
+A Workflow API call can send a JSON body and querystring parameters.
+
+```js
+// Using just JSON in the body
+await MyAPI.send({
+  value: 23
+});
+
+// Sending a `param` querystring as well
+await MyAPI.send({
+  value: 23
+}, {
+  param: true
+});
+```
 
 ## License
 [MIT](https://oss.ninja/mit?organization=Curtis%20Cummings)

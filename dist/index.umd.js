@@ -1,12 +1,13 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch'), require('lodash.omit')) :
-  typeof define === 'function' && define.amd ? define(['node-fetch', 'lodash.omit'], factory) :
-  (global = global || self, global.nodeBubbleio = factory(global.nodeFetch, global.omit));
-})(this, (function (fetch, omit) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch'), require('lodash.omit'), require('qs')) :
+  typeof define === 'function' && define.amd ? define(['node-fetch', 'lodash.omit', 'qs'], factory) :
+  (global = global || self, global.nodeBubbleio = factory(global.nodeFetch, global.omit, global.qs));
+})(this, (function (fetch, omit, qs) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var fetch__default = /*#__PURE__*/_interopDefaultLegacy(fetch);
   var omit__default = /*#__PURE__*/_interopDefaultLegacy(omit);
+  var qs__default = /*#__PURE__*/_interopDefaultLegacy(qs);
 
   let globalConfig = {};
 
@@ -69,12 +70,12 @@
     return _extends.apply(this, arguments);
   }
 
-  const handleError = error => {
+  const handleError$1 = error => {
     console.error(error);
     throw error;
   };
 
-  const handleFetchResponse = async response => {
+  const handleFetchResponse$1 = async response => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error(errorText);
@@ -142,7 +143,7 @@
       } = new this({});
       const response = await fetch__default["default"](`${baseUrl}${buildSearchQuery(query)}`, {
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       const responseData = await response.json();
       return _extends({}, responseData.response, {
         results: responseData.response.results.map(data => new this(data))
@@ -155,7 +156,7 @@
       } = new this({});
       const response = await fetch__default["default"](`${baseUrl}/${id}`, {
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       const responseData = await response.json();
       return new this(responseData.response);
     }
@@ -168,7 +169,7 @@
         method: 'POST',
         body: JSON.stringify(sanitizeData(data)),
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       const responseData = await response.json();
       return new this({
         _id: responseData.id
@@ -185,7 +186,7 @@
         headers: _extends({}, config.getDefaultHeaders(), {
           'Content-Type': 'text/plain'
         })
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       const responseData = await response.text();
       const results = JSON.parse(`[${responseData.replace(/\n/g, ',')}]`);
       const records = await Promise.all(results.map(r => new this({
@@ -205,7 +206,7 @@
 
       const response = await fetch__default["default"](`${baseUrl}/${this._id}`, {
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       const responseData = await response.json();
       Object.assign(this, responseData.response);
       return this;
@@ -222,7 +223,7 @@
         method,
         body: JSON.stringify(sanitizeData(this)),
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
 
       if (isNew) {
         const responseData = await response.json();
@@ -245,8 +246,57 @@
       const response = await fetch__default["default"](`${baseUrl}/${_id}`, {
         method: 'DELETE',
         headers: config.getDefaultHeaders()
-      }).then(handleFetchResponse).catch(handleError);
+      }).then(handleFetchResponse$1).catch(handleError$1);
       return response ? response.ok : false;
+    }
+
+  }
+
+  const handleError = error => {
+    console.error(error);
+    throw error;
+  };
+
+  const handleFetchResponse = async response => {
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(errorText);
+      throw errorText;
+    }
+
+    return response;
+  };
+
+  function buildRequestQuery(querystring) {
+    if (!querystring) {
+      return '';
+    }
+
+    return qs__default["default"].stringify(querystring, {
+      addQueryPrefix: true
+    });
+  }
+
+  class WorkflowAPI {
+    constructor(options) {
+      this._name = void 0;
+      this._name = options.name;
+    }
+
+    get baseUrl() {
+      return `${config.getBaseUrl()}/wf/${this._name}`;
+    }
+
+    async send(data, querystring) {
+      const {
+        baseUrl
+      } = this;
+      const response = await fetch__default["default"](`${baseUrl}${buildRequestQuery(querystring)}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: config.getDefaultHeaders()
+      }).then(handleFetchResponse).catch(handleError);
+      return response.json();
     }
 
   }
@@ -255,8 +305,8 @@
     init: initialConfig => {
       config.set(initialConfig);
     },
-    DataAPI // Workflow: {},
-
+    DataAPI,
+    WorkflowAPI
   };
 
   return BubbleIO;

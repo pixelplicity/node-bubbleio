@@ -122,3 +122,18 @@ export type PaginatedResponse<T> = {
   remaining: number;
   results: T[];
 };
+
+export type WorkflowAPIOptions = {
+  name: string;
+}
+
+export type WorkflowAPIResponse = {
+  status: string;
+  message?: string;
+  response?: Record<string, any>;
+};
+
+export type WorkflowAPIErrorResponse = {
+  statusCode: string;
+  body: WorkflowAPIResponse
+};
