@@ -22,7 +22,7 @@ export interface GetResponse<T> {
   response: T;
 }
 
-export type AllConstraintType = 'equals' | 'not_equal' | 'in' | 'not in';
+export type AllConstraintType = 'equals' | 'not equal' | 'in' | 'not in';
 export type AllConstraint<T> = {
   key: keyof T;
   constraint_type: AllConstraintType;

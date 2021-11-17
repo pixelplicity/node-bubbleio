@@ -18,7 +18,7 @@ export interface DataAPIOptions {
 export interface GetResponse<T> {
     response: T;
 }
-export declare type AllConstraintType = 'equals' | 'not_equal' | 'in' | 'not in';
+export declare type AllConstraintType = 'equals' | 'not equal' | 'in' | 'not in';
 export declare type AllConstraint<T> = {
     key: keyof T;
     constraint_type: AllConstraintType;

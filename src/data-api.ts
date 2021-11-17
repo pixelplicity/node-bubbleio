@@ -89,7 +89,7 @@ export default abstract class DataAPI implements BaseDataAttributes {
     query?: SearchQuery<T>
   ): Promise<PaginatedResponse<T>> {
     const { baseUrl } = new this({});
-    const response = await fetch(`${baseUrl}${buildSearchQuery<T>(query)}`, {
+    const response = await fetch(`${baseUrl}${buildSearchQuery(query)}`, {
       headers: config.getDefaultHeaders(),
     })
       .then(handleFetchResponse)
