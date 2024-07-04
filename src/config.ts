@@ -48,8 +48,8 @@ export const config = {
   },
   getBaseUrl(): string {
     return `https://${globalConfig.domain}/${
-      globalConfig.isLive ? '' : 'version-test'
-    }/api/1.1/`;
+      globalConfig.isLive ? '' : 'version-test/'
+    }api/1.1`;
   },
 };
 
